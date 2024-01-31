@@ -1,4 +1,4 @@
-name: Qodana
+name: Checks
 on:
   workflow_dispatch:
   pull_request:
@@ -11,6 +11,10 @@ on:
 jobs:
   security:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
     steps:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
