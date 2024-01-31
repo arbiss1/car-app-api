@@ -1,5 +1,5 @@
 - into docker container:\
-`docker exec -it ecommerce-app bash`
+`docker exec -it carapi-app bash`
 
 
 ### docker start:

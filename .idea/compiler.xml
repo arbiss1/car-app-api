@@ -21,7 +21,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ECOMMERCE-back" options="-parameters" />
-      <module name="car-app-api" options="-parameters" />
+      <module name="car-app-api" options="" />
       <module name="client" options="-parameters" />
       <module name="persistence" options="-parameters" />
       <module name="server" options="-parameters" />

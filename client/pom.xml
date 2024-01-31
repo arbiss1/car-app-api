@@ -3,20 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.2</version>
-        <relativePath/>
+        <groupId>car.app.api</groupId>
+        <artifactId>car-app-api</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>ecommerce.web.app</groupId>
     <artifactId>client</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>client</name>
-    <description>client</description>
-    <properties>
-        <java.version>17</java.version>
-        <maven.compiler.source>17</maven.compiler.source>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -29,11 +20,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>6.1.3</version>
         </dependency>
     </dependencies>
 </project>

@@ -3,26 +3,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>ecommerce.web.app</groupId>
+        <groupId>car.app.api</groupId>
         <artifactId>car-app-api</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/>
     </parent>
     <artifactId>server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>server</name>
-    <description>server</description>
-    <properties>
-        <java.version>17</java.version>
-    </properties>
+
     <dependencies>
         <dependency>
-            <groupId>ecommerce.web.app</groupId>
+            <groupId>car.app.api</groupId>
             <artifactId>persistence</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>ecommerce.web.app</groupId>
+            <groupId>car.app.api</groupId>
             <artifactId>client</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
@@ -36,6 +30,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -44,5 +39,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
