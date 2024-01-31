@@ -22,11 +22,9 @@ public class CarInfoController {
 
     @GetMapping("/models")
     public ResponseEntity<CarModels> getCarModels(
-            @RequestParam(name = "limit", defaultValue = "100") String limit,
-            @RequestParam(name = "offset", defaultValue = "0") String offset,
             @RequestParam(name = "brand") String brand
     ) throws Exception {
-        return ResponseEntity.ok(carInfoService.getCarModels(limit, offset, brand));
+        return ResponseEntity.ok(carInfoService.getCarModels("100", "0", brand));
     }
 
     @GetMapping("/brands")
