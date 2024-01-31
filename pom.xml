@@ -9,7 +9,7 @@
     <relativePath/>
   </parent>
   <groupId>ecommerce.web.app</groupId>  
-  <artifactId>web-ecommerce</artifactId>
+  <artifactId>car-app-api</artifactId>
   <version>0.0.1-SNAPSHOT</version>  
   <packaging>pom</packaging>
   <name>Ecommerce</name>
