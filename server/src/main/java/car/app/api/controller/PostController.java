@@ -9,13 +9,13 @@ import car.app.api.service.PostService;
 import car.app.api.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.AuthenticationException;
 import javax.validation.Valid;
 
 @RestController
@@ -31,7 +31,7 @@ public class PostController {
     @PostMapping("/create")
     public ResponseEntity<PostResponse> create(
             @Valid @RequestBody PostRequest postRequest, BindingResult result
-    ) throws UserNotFoundException, AuthenticationException, BindingException, ImageCustomException {
+    ) throws UserNotFoundException, AuthenticationException, BindingException, ImageCustomException, javax.naming.AuthenticationException {
             return ResponseEntity.ok(postService.save(postRequest, userService.getAuthenticatedUser(), postRequest.getImageUrls(), result));
     }
 
@@ -48,6 +48,11 @@ public class PostController {
             return ResponseEntity.ok(postService.findAll(page, size));
     }
 
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostDetails> get(@PathVariable(name = "postId") String postId) throws PostCustomException{
+        return ResponseEntity.ok(postService.get(postId));
+    }
+
     @PostMapping("/search")
     public ResponseEntity<Page<PostDetails>> search(
             @RequestBody SearchBuilderRequest searchBuilderRequest,
@@ -61,12 +66,12 @@ public class PostController {
     public ResponseEntity<Page<PostDetails>> listByUser(
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "20") Integer size
-    ) throws UserNotFoundException, AuthenticationException {
+    ) throws UserNotFoundException, AuthenticationException, javax.naming.AuthenticationException {
             return ResponseEntity.ok(postService.listByUser(userService.getAuthenticatedUser().getId(), page, size));
     }
 
     @PutMapping("/edit/{postId}")
-    public ResponseEntity<EditPostResponse> edit(@PathVariable(name = "postId") String postId, @RequestBody EditPostRequest editPostRequest, BindingResult result) throws PostCustomException, UserNotFoundException, AuthenticationException, BindingException {
+    public ResponseEntity<EditPostResponse> edit(@PathVariable(name = "postId") String postId, @RequestBody EditPostRequest editPostRequest, BindingResult result) throws PostCustomException, UserNotFoundException, AuthenticationException, BindingException, javax.naming.AuthenticationException {
             return ResponseEntity.ok(postService.editPostDetails(postId, editPostRequest, userService.getAuthenticatedUser(), result));
     }
 

@@ -22,7 +22,6 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 public class PostService {
-
     public final PostRepository postRepository;
     public final SearchService searchService;
     public final MessageSource messageByLocale;
@@ -36,6 +35,12 @@ public class PostService {
         Post post = postRepository.save(mapToPost(postRequest, userAuth));
         if(postsImageUrls != null && !postsImageUrls.isEmpty()) imageUploadService.postImageUpload(postsImageUrls, post);
         return new PostResponse(post.getId());
+    }
+
+    public PostDetails get(String postId) throws PostCustomException{
+        Post post = postRepository.findById(postId).orElseThrow(() -> new PostCustomException(buildError("error.404.postNotFound")));
+        return mapToPostDetail(post, imageUploadService.getImages(post)
+                .stream().map(String::valueOf).toList());
     }
 
     public EditPostResponse editPostDetails(String postId, EditPostRequest editPostRequest, User authUser, BindingResult result)
@@ -66,11 +71,12 @@ public class PostService {
 
     public Page<PostDetails> findAll(Integer page, Integer size) {
         Page<Post> postPage = postRepository.findAll(PageRequest.of(page, size));
-        List<PostDetails> postDetailsList = postPage.getContent().stream()
+        List<PostDetails> postDetailsList = new ArrayList<>(postPage.getContent().stream()
                 .map(post -> mapToPostDetail(post, imageUploadService.getImages(post)
                         .stream().map(String::valueOf).toList()))
-                .toList();
+                .toList());
 
+        postDetailsList.sort(Comparator.comparing(PostDetails::getCreatedAt));
         return new PageImpl<>(postDetailsList, postPage.getPageable(), postPage.getTotalElements());
     }
 
