@@ -28,5 +28,5 @@ public class PostDetails {
     private String engineSize;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private List<String> images;
+    private List<String> imageUrls;
 }

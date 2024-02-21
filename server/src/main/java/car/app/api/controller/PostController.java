@@ -31,7 +31,7 @@ public class PostController {
     @PostMapping("/create")
     public ResponseEntity<PostResponse> create(
             @Valid @RequestBody PostRequest postRequest, BindingResult result
-    ) throws UserNotFoundException, AuthenticationException, BindingException, ImageCustomException, javax.naming.AuthenticationException {
+    ) throws UserNotFoundException, BindingException, ImageCustomException, javax.naming.AuthenticationException {
             return ResponseEntity.ok(postService.save(postRequest, userService.getAuthenticatedUser(), postRequest.getImageUrls(), result));
     }
 
