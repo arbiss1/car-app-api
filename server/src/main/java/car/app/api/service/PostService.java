@@ -1,6 +1,7 @@
 package car.app.api.service;
 
 import car.app.api.controller.model.*;
+import car.app.api.entities.ImageUpload;
 import car.app.api.entities.Post;
 import car.app.api.entities.User;
 import car.app.api.exceptions.BindingException;
@@ -39,8 +40,7 @@ public class PostService {
 
     public PostDetails get(String postId) throws PostCustomException{
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostCustomException(buildError("error.404.postNotFound")));
-        return mapToPostDetail(post, imageUploadService.getImages(post)
-                .stream().map(String::valueOf).toList());
+        return mapToPostDetail(post, imageUploadService.getImages(post).stream().map(ImageUpload::getProfileImage).toList());
     }
 
     public EditPostResponse editPostDetails(String postId, EditPostRequest editPostRequest, User authUser, BindingResult result)
@@ -73,7 +73,7 @@ public class PostService {
         Page<Post> postPage = postRepository.findAll(PageRequest.of(page, size));
         List<PostDetails> postDetailsList = new ArrayList<>(postPage.getContent().stream()
                 .map(post -> mapToPostDetail(post, imageUploadService.getImages(post)
-                        .stream().map(String::valueOf).toList()))
+                        .stream().map(ImageUpload::getProfileImage).toList()))
                 .toList());
 
         postDetailsList.sort(Comparator.comparing(PostDetails::getCreatedAt));
@@ -86,7 +86,7 @@ public class PostService {
             Page<Post> postPage = postRepository.findAll(PageRequest.of(page, size));
             List<PostDetails> postDetailsList = postPage.getContent().stream()
                     .map(post -> mapToPostDetail(post, imageUploadService.getImages(post)
-                            .stream().map(String::valueOf).toList()))
+                            .stream().map(ImageUpload::getProfileImage).toList()))
                     .toList();
 
             return new PageImpl<>(postDetailsList, postPage.getPageable(), postPage.getTotalElements());
@@ -94,7 +94,7 @@ public class PostService {
         Page<Post> response = searchService.searchPosts(searchBuilderRequest, page, size);
         List<PostDetails> postDetailsList = response.stream()
                 .map(post -> mapToPostDetail(post, imageUploadService.getImages(post)
-                        .stream().map(String::valueOf).toList()))
+                        .stream().map(ImageUpload::getProfileImage).toList()))
                 .toList();
 
         return new PageImpl<>(postDetailsList, response.getPageable(), response.getTotalElements());
@@ -104,7 +104,7 @@ public class PostService {
         Page<Post> postPage = postRepository.findByUserId(userId, PageRequest.of(page, size));
         List<PostDetails> postDetailsList = postPage.getContent().stream()
                 .map(post -> mapToPostDetail(post, imageUploadService.getImages(post)
-                        .stream().map(String::valueOf).toList()))
+                        .stream().map(ImageUpload::getProfileImage).toList()))
                 .toList();
 
         return new PageImpl<>(postDetailsList, postPage.getPageable(), postPage.getTotalElements());
