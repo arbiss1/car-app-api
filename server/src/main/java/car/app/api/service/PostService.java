@@ -43,14 +43,14 @@ public class PostService {
         return mapToPostDetail(post, imageUploadService.getImages(post).stream().map(ImageUpload::getProfileImage).toList());
     }
 
-    public EditPostResponse editPostDetails(String postId, EditPostRequest editPostRequest, User authUser, BindingResult result)
+    public EditPostResponse edit(String postId, EditPostRequest editPostRequest, User authUser, BindingResult result)
             throws PostCustomException, BindingException {
         if (result.hasErrors()) {
             throw new BindingException(result.getAllErrors().toString());
         }
         Optional<Post> findPost = postRepository.findById(postId);
         if (findPost.isPresent()) {
-            Post editablePost = editPostDetails(findPost.get(), editPostRequest, authUser);
+            Post editablePost = edit(findPost.get(), editPostRequest, authUser);
             editablePost.setIsFavorite(findPost.get().getIsFavorite());
             editablePost.setId(findPost.get().getId());
             return new EditPostResponse(postRepository.save(editablePost).getId());
@@ -59,7 +59,7 @@ public class PostService {
         }
     }
 
-    public String changeStatus(String postId) throws PostCustomException {
+    public String activate(String postId) throws PostCustomException {
         Optional<Post> findIfPostExist = postRepository.findById(postId);
         if (findIfPostExist.isPresent()) {
             findIfPostExist.get().setStatus(PostStatus.ACTIVE.mapToStatus());
@@ -110,7 +110,7 @@ public class PostService {
         return new PageImpl<>(postDetailsList, postPage.getPageable(), postPage.getTotalElements());
     }
 
-    public void deleteById(String postId) throws PostCustomException {
+    public void delete(String postId) throws PostCustomException {
         Post findPost = postRepository.findById(postId).orElseThrow(() ->
                 new PostCustomException(buildError("error.404.postNotFound")));
         imageUploadService.deleteImages(findPost);
@@ -145,7 +145,7 @@ public class PostService {
         return post;
     }
 
-    private Post editPostDetails(Post post, EditPostRequest editPostRequest, User getAuthenticatedUser){
+    private Post edit(Post post, EditPostRequest editPostRequest, User getAuthenticatedUser){
         post.setModifiedBy(getAuthenticatedUser.getUsername());
         post.setModifiedAt(LocalDateTime.now());
         if(editPostRequest.getCurrency() != null) post.setCurrency(editPostRequest.getCurrency().mapToStatus());

@@ -22,7 +22,7 @@ public class CarInfoService {
     private final CarsApiClient carsApiClient;
 
     @Cacheable("getCarModels")
-    public CarModels getCarModels(String limit, String offset, String brand) throws Exception {
+    public CarModels carModels(String limit, String offset, String brand) throws Exception {
         int limitValue = Integer.parseInt(limit);
         int offsetValue = Integer.parseInt(offset);
 
@@ -61,7 +61,7 @@ public class CarInfoService {
         return new CarModels(response);
     }
 
-    public CarBrands getCarBrands(){
+    public CarBrands carBrands(){
         return new CarBrands(List.of( "Abarth",
                 "Alfa Romeo",
                 "Aston Martin",
@@ -129,7 +129,7 @@ public class CarInfoService {
         ));
     }
 
-    public CarTypes getCarTypes(){
+    public CarTypes carTypes(){
         return new CarTypes(List.of(
                 "Convertible",
                 "Hatchback",

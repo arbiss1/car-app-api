@@ -17,23 +17,14 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 @PreAuthorize("permitAll()")
 public class CarInfoController {
-
     private final CarInfoService carInfoService;
 
     @GetMapping("/models")
-    public ResponseEntity<CarModels> getCarModels(
-            @RequestParam(name = "brand") String brand
-    ) throws Exception {
-        return ResponseEntity.ok(carInfoService.getCarModels("100", "0", brand));
-    }
+    public ResponseEntity<CarModels> carModels(@RequestParam(name = "brand") String brand) throws Exception {return ResponseEntity.ok(carInfoService.carModels("100", "0", brand));}
 
     @GetMapping("/brands")
-    public ResponseEntity<CarBrands> getCarBrands(){
-        return ResponseEntity.ok(carInfoService.getCarBrands());
-    }
+    public ResponseEntity<CarBrands> carBrands(){return ResponseEntity.ok(carInfoService.carBrands());}
 
     @GetMapping("/types")
-    public ResponseEntity<CarTypes> getCarTypes(){
-        return ResponseEntity.ok(carInfoService.getCarTypes());
-    }
+    public ResponseEntity<CarTypes> carTypes(){return ResponseEntity.ok(carInfoService.carTypes());}
 }

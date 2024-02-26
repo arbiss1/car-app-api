@@ -9,7 +9,6 @@ import car.app.api.service.PostService;
 import car.app.api.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +36,7 @@ public class PostController {
 
     @PostMapping("/activate/{postId}")
     public ResponseEntity<String> activate(@PathVariable(value = "postId") String postId) throws PostCustomException {
-            return ResponseEntity.ok(postService.changeStatus(postId));
+            return ResponseEntity.ok(postService.activate(postId));
     }
 
     @GetMapping("/all")
@@ -66,18 +65,18 @@ public class PostController {
     public ResponseEntity<Page<PostDetails>> listByUser(
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "20") Integer size
-    ) throws UserNotFoundException, AuthenticationException, javax.naming.AuthenticationException {
+    ) throws UserNotFoundException, javax.naming.AuthenticationException {
             return ResponseEntity.ok(postService.listByUser(userService.getAuthenticatedUser().getId(), page, size));
     }
 
     @PutMapping("/edit/{postId}")
-    public ResponseEntity<EditPostResponse> edit(@PathVariable(name = "postId") String postId, @RequestBody EditPostRequest editPostRequest, BindingResult result) throws PostCustomException, UserNotFoundException, AuthenticationException, BindingException, javax.naming.AuthenticationException {
-            return ResponseEntity.ok(postService.editPostDetails(postId, editPostRequest, userService.getAuthenticatedUser(), result));
+    public ResponseEntity<EditPostResponse> edit(@PathVariable(name = "postId") String postId, @RequestBody EditPostRequest editPostRequest, BindingResult result) throws PostCustomException, UserNotFoundException, BindingException, javax.naming.AuthenticationException {
+            return ResponseEntity.ok(postService.edit(postId, editPostRequest, userService.getAuthenticatedUser(), result));
     }
 
     @DeleteMapping("/delete/{postId}")
     public ResponseEntity<Void> delete(@PathVariable(name = "postId") String postId) throws PostCustomException {
-            postService.deleteById(postId);
+            postService.delete(postId);
             return ResponseEntity.ok().build();
         }
 }

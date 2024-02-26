@@ -24,7 +24,7 @@ import javax.naming.AuthenticationException;
 public class FavoritesController {
     public final FavoritesService favoritesService;
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<Page<FavoriteDetails>> show(
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "20") Integer size

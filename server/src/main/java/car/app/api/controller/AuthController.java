@@ -28,12 +28,12 @@ public class AuthController {
     private final JwtUtils jwtUtils;
 
     @PostMapping(value = "/authenticate")
-    public ResponseEntity<AuthUserResponse> createAuthenticationToken(@Valid @RequestBody AuthUserRequest authenticationRequest, BindingResult result) throws UsernameAlreadyExists {
+    public ResponseEntity<AuthUserResponse> authenticate(@Valid @RequestBody AuthUserRequest authenticationRequest, BindingResult result) throws UsernameAlreadyExists {
         return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest, result));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserRequest userRequest, BindingResult result) throws UsernameAlreadyExists {
+    public ResponseEntity<UserResponse> save(@Valid @RequestBody UserRequest userRequest, BindingResult result) throws UsernameAlreadyExists {
         return ResponseEntity.ok(userService.save(userRequest, result));
     }
 
@@ -49,8 +49,8 @@ public class AuthController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable(name = "id") String id) throws UserNotFoundException {
-        userService.deleteUser(id);
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") String id) throws UserNotFoundException {
+        userService.delete(id);
         return ResponseEntity.ok().build();
     }
 
