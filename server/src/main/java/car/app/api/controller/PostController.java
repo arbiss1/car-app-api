@@ -70,7 +70,7 @@ public class PostController {
     }
 
     @PutMapping("/edit/{postId}")
-    public ResponseEntity<EditPostResponse> edit(@PathVariable(name = "postId") String postId, @RequestBody EditPostRequest editPostRequest, BindingResult result) throws PostCustomException, UserNotFoundException, BindingException, javax.naming.AuthenticationException {
+    public ResponseEntity<EditPostResponse> edit(@PathVariable(name = "postId") String postId, @RequestBody EditPostRequest editPostRequest, BindingResult result) throws PostCustomException, UserNotFoundException, BindingException, javax.naming.AuthenticationException, ImageCustomException {
             return ResponseEntity.ok(postService.edit(postId, editPostRequest, userService.getAuthenticatedUser(), result));
     }
 

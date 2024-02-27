@@ -44,7 +44,7 @@ public class PostService {
     }
 
     public EditPostResponse edit(String postId, EditPostRequest editPostRequest, User authUser, BindingResult result)
-            throws PostCustomException, BindingException {
+            throws PostCustomException, BindingException, ImageCustomException {
         if (result.hasErrors()) {
             throw new BindingException(result.getAllErrors().toString());
         }
@@ -145,7 +145,7 @@ public class PostService {
         return post;
     }
 
-    private Post edit(Post post, EditPostRequest editPostRequest, User getAuthenticatedUser){
+    private Post edit(Post post, EditPostRequest editPostRequest, User getAuthenticatedUser) throws ImageCustomException {
         post.setModifiedBy(getAuthenticatedUser.getUsername());
         post.setModifiedAt(LocalDateTime.now());
         if(editPostRequest.getCurrency() != null) post.setCurrency(editPostRequest.getCurrency().mapToStatus());
@@ -163,6 +163,16 @@ public class PostService {
         if(editPostRequest.getType() != null) post.setType(editPostRequest.getType());
         if(editPostRequest.getModel() != null) post.setModel(editPostRequest.getModel());
         if(editPostRequest.getPostType() != null) post.setPostType(editPostRequest.getPostType());
+        if(!editPostRequest.getImageUrls().isEmpty() && editPostRequest.getImageUrls() != null) {
+            List<String> existingImages = imageUploadService.getImages(post).stream().map(ImageUpload::getProfileImage).toList();
+            List<String> toBeSaved = new ArrayList<>();
+            for (String imageUrl : editPostRequest.getImageUrls()) {
+                if(!existingImages.contains(imageUrl)){
+                    toBeSaved.add(imageUrl);
+                }
+            }
+            imageUploadService.postImageUpload(toBeSaved, post);
+        }
         return post;
     }
 
