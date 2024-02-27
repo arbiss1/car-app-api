@@ -167,11 +167,11 @@ public class PostService {
             List<String> existingImages = imageUploadService.getImages(post).stream().map(ImageUpload::getProfileImage).toList();
             List<String> toBeSaved = new ArrayList<>();
             for (String imageUrl : editPostRequest.getImageUrls()) {
-                if(!existingImages.contains(imageUrl)){
+                if(!existingImages.isEmpty() && !existingImages.contains(imageUrl)){
                     toBeSaved.add(imageUrl);
                 }
             }
-            imageUploadService.postImageUpload(toBeSaved, post);
+            if(!toBeSaved.isEmpty()) imageUploadService.postImageUpload(toBeSaved, post);
         }
         return post;
     }
