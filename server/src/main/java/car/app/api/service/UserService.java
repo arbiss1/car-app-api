@@ -1,5 +1,6 @@
 package car.app.api.service;
 
+import car.app.api.controller.model.EditUserRequest;
 import car.app.api.controller.model.UserRequest;
 import car.app.api.controller.model.UserResponse;
 import car.app.api.exceptions.UserNotFoundException;
@@ -20,6 +21,7 @@ import javax.naming.AuthenticationException;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Service
 public class UserService {
@@ -47,9 +49,34 @@ public class UserService {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    public void delete(String userId) throws UserNotFoundException {
-        User findUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(buildError("error.404.userNotFound")));
+    public void delete() throws UserNotFoundException, AuthenticationException {
+        User findUser = userRepository.findById(getAuthenticatedUser().getId()).orElseThrow(() -> new UserNotFoundException(buildError("error.404.userNotFound")));
         userRepository.deleteById(findUser.getId());
+    }
+
+    public GetUserResponse edit(EditUserRequest editUserRequest) throws UserNotFoundException, AuthenticationException {
+        User user = getAuthenticatedUser();
+        updateFieldIfNotNull(user::setAddress, editUserRequest.getAddress());
+        updateFieldIfNotNull(user::setFirstName, editUserRequest.getFirstName());
+        updateFieldIfNotNull(user::setLastName, editUserRequest.getLastName());
+        updateFieldIfNotNull(user::setPhoneNumber, editUserRequest.getPhoneNumber());
+        updateFieldIfNotNull(user::setCountry, editUserRequest.getCountry());
+        updateFieldIfNotNull(user::setCity, editUserRequest.getCity());
+        updateFieldIfNotNull(user::setEmail, editUserRequest.getEmail());
+        user.setModifiedAt(LocalDateTime.now());
+        user.setModifiedBy(user.getUsername());
+
+        User savedUser = userRepository.save(user);
+        return new GetUserResponse(
+                savedUser.getUsername(),
+                savedUser.getFirstName(),
+                savedUser.getLastName(),
+                savedUser.getCity(),
+                savedUser.getCountry(),
+                savedUser.getEmail(),
+                savedUser.getPhoneNumber(),
+                savedUser.getAddress()
+        );
     }
 
     public UserResponse save(UserRequest userRequest, BindingResult result) throws UsernameAlreadyExists {
@@ -98,5 +125,11 @@ public class UserService {
 
     private String buildError(String message) {
         return messageByLocale.getMessage(message, null, Locale.ENGLISH);
+    }
+
+    private <T> void updateFieldIfNotNull(Consumer<T> setter, T value) {
+        if (value != null && value != "") {
+            setter.accept(value);
+        }
     }
 }

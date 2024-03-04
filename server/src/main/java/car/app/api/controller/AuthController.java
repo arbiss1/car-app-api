@@ -14,6 +14,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.naming.AuthenticationException;
 import javax.validation.Valid;
 
 @RestController
@@ -37,6 +39,11 @@ public class AuthController {
         return ResponseEntity.ok(userService.save(userRequest, result));
     }
 
+    @PutMapping("/edit")
+    public ResponseEntity<GetUserResponse> edit(@RequestBody EditUserRequest editUserRequest) throws UserNotFoundException, AuthenticationException {
+        return ResponseEntity.ok(userService.edit(editUserRequest));
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request) {
         jwtUtils.handleLogout(extractTokenFromHeader(request));
@@ -48,9 +55,9 @@ public class AuthController {
         return ResponseEntity.ok(userService.get());
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") String id) throws UserNotFoundException {
-        userService.delete(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> delete() throws UserNotFoundException, AuthenticationException {
+        userService.delete();
         return ResponseEntity.ok().build();
     }
 
