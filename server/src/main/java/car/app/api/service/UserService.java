@@ -8,6 +8,7 @@ import car.app.api.exceptions.UsernameAlreadyExists;
 import car.app.api.controller.model.GetUserResponse;
 import car.app.api.entities.User;
 import car.app.api.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,7 +49,7 @@ public class UserService {
     public User getByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-
+@Transactional
     public void delete() throws UserNotFoundException, AuthenticationException {
         User findUser = userRepository.findById(getAuthenticatedUser().getId()).orElseThrow(() -> new UserNotFoundException(buildError("error.404.userNotFound")));
         userRepository.deleteById(findUser.getId());
